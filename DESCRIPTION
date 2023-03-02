@@ -1,0 +1,32 @@
+Package: fluents
+Type: Package
+Title: Phase Plane Analysis of Low-Dimensional Ordinary Differential Equation Models
+Version: 0.1.0
+Authors@R: c(
+    person(given = "Ramiro", family = "Magno", email = "ramiro.magno@gmail.com",
+    role = c("aut", "cre"), comment = c(ORCID = "0000-0001-5226-3441")),
+    person("Pattern Institute",
+    role = c("cph", "fnd"))
+    )
+Description: An opinionated R package re-implementation of grind.R
+    <https://tbb.bio.uu.nl/rdb/grindR.html> by Rob de Boer, Theoretical
+    Biology and Bioinformatics, University of Utrecht. grind.R, in turn,
+    is a port of the C-based program GRIND (GReat INtegrator Differential equations)
+    <https://tbb.bio.uu.nl/rdb/grindC.html> to R, from the same author.
+    This package API has more functions that do less each, while grind.R's
+    has fewer functions that do more each.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    deSolve,
+    FME,
+    magrittr,
+    rlang,
+    rootSolve,
+    tibble,
+    tidyr
+RoxygenNote: 7.2.3
+Roxygen: list(markdown = TRUE)
+URL: https://github.com/ramiromagno/fluents
+BugReports: https://github.com/ramiromagno/fluents/issues

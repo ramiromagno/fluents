@@ -6,7 +6,7 @@ steady <- function(.warnings = FALSE, ...) {
       rootSolve::steady(...)
     } else {
       # The `supress_output()` call is buggy.
-      suppress_output(suppressWarnings(rootSolve::steady(...)))
+      suppressWarnings(rootSolve::steady(...))
       # suppressMessages(rootSolve::steady(...))
     }
 
@@ -105,7 +105,8 @@ find_steady_state_ <- function(s0, p, m, rounding_digits = 5, ...) {
 find_steady_state <- function(s0, p, m, rounding_digits = 5, distinct = FALSE, ...) {
 
   if(is.atomic(s0)) s0 <- tibble::as_tibble(as.list(s0))
-  nm <- names(s0)
+  # Else, `s0` is expected to be a data frame.
+  nm <- colnames(s0)
 
   tbl <-
     apply(
@@ -121,4 +122,18 @@ find_steady_state <- function(s0, p, m, rounding_digits = 5, distinct = FALSE, .
 
   if(distinct) return(dplyr::distinct(tbl, dplyr::across(dplyr::all_of(nm)), .keep_all = TRUE))
   else return(tbl)
+}
+
+#' @importFrom rlang .data
+#' @export
+steady_states <- function(s0, p, m, rounding_digits = 5, distinct = TRUE) {
+  find_steady_state(
+    s0 = s0,
+    p = p,
+    m = m,
+    rounding_digits,
+    distinct = distinct
+  ) %>%
+    dplyr::filter(.data$is_steady_state) %>%
+    dplyr::select(-"is_steady_state")
 }

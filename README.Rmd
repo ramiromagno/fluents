@@ -11,6 +11,7 @@ knitr::opts_chunk$set(
   fig.path = "man/figures/README-",
   out.width = "100%"
 )
+library(tidyverse)
 ```
 
 # fluents <img src='man/figures/logo.svg' align="right" height="139" />
@@ -46,11 +47,48 @@ remotes::install_github("ramiromagno/fluents")
 
 ## Example
 
-TODO
-
-```{r example}
+```{r lotka, dpi=300, fig.width=6, fig.height=3, out.width=600}
 library(fluents)
-## TODO
+
+# `m`: Lotka-Volterra model
+m <- function(t, state, parms) {
+  with(as.list(c(state, parms)), {
+    dR <- r * R * (1 - R / K) - a * R * N
+    dN <- c * a * R * N - delta * N
+    
+    return(list(c(dR, dN)))
+  })
+}
+
+# `p`: vector of parameters
+p <- c(
+  r = 1,
+  K = 1,
+  a = 1,
+  c = 1,
+  delta = 0.5
+)
+
+# `s`: vector of initial state
+s <- c(R = 1, N = 0.01)
+
+# `t`: time points
+t <- seq(0, 100, by= 1)
+
+# Integrate the ODE
+sol <- solve(s = s, p = p, m = m, t = t)
+
+# Make a time plot of the solution `sol`
+tidyr::pivot_longer(sol, cols = c("R", "N"), names_to = "var", values_to = "pop") %>%
+ggplot(aes(x = t, y = pop, col = var)) +
+  geom_line()
+
+# Find steady states
+steady_states(
+  s0 = tidyr::expand_grid(R = seq(0, 1, 0.1), N = seq(0, 1, 0.1)),
+  p = p,
+  m = m
+  )
 ```
 
 ## From `grind.R` to `{fluents}`
@@ -58,5 +96,5 @@ library(fluents)
 | grind.R                        | fluents                                          |
 |------------------------------- |--------------------------------------------------|
 | `run()`                        | `solve()`                                        | 
-
+| `newton()`                     | `steady_states()`                                |
 

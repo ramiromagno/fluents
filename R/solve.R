@@ -57,7 +57,7 @@ solve <- function(s, p, m, t, solver_type = c('ode', 'dede'), ...) {
   # save the solution at the time points `t`.
   solution <- solver(y = s, times = t, func = m, parms = p, ...)
 
-  # Rename the time column to `t` or `.t` to avoid clashes with state variables
+  # Rename the time column to `t`, or `.t` to avoid clashes with state variables
   # that might be named `t` or `time`.
   solution <- rename_time_col(solution)
 

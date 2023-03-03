@@ -38,8 +38,6 @@ remotes::install_github("ramiromagno/fluents")
 
 ## Example
 
-TODO
-
 ``` r
 library(fluents)
 #> 
@@ -47,11 +45,66 @@ library(fluents)
 #> The following object is masked from 'package:base':
 #> 
 #>     solve
-## TODO
+
+# `m`: Lotka-Volterra model
+m <- function(t, state, parms) {
+  with(as.list(c(state, parms)), {
+    dR <- r * R * (1 - R / K) - a * R * N
+    dN <- c * a * R * N - delta * N
+    
+    return(list(c(dR, dN)))
+  })
+}
+
+# `p`: vector of parameters
+p <- c(
+  r = 1,
+  K = 1,
+  a = 1,
+  c = 1,
+  delta = 0.5
+)
+
+# `s`: vector of initial state
+s <- c(R = 1, N = 0.01)
+
+# `t`: time points
+t <- seq(0, 100, by= 1)
+
+# Integrate the ODE
+sol <- solve(s = s, p = p, m = m, t = t)
+
+# Make a time plot of the solution `sol`
+tidyr::pivot_longer(sol, cols = c("R", "N"), names_to = "var", values_to = "pop") %>%
+ggplot(aes(x = t, y = pop, col = var)) +
+  geom_line()
+```
+
+<img src="man/figures/README-lotka-1.png" width="600" />
+
+``` r
+
+# Find steady states
+steady_states(
+  s0 = tidyr::expand_grid(R = seq(0, 1, 0.1), N = seq(0, 1, 0.1)),
+  p = p,
+  m = m
+  )
+#> diagonal element is zero 
+#> [1] 2
+#> diagonal element is zero 
+#> [1] 2
+#> # A tibble: 3 × 8
+#>     ..R   ..N     R     N stability jacobian      eigenvalues eigenvectors 
+#>   <dbl> <dbl> <dbl> <dbl> <chr>     <list>        <list>      <list>       
+#> 1   0     0     0     0   unstable  <dbl [2 × 2]> <dbl [2]>   <dbl [2 × 2]>
+#> 2   0.1   0.8   0.5   0.5 stable    <dbl [2 × 2]> <cpl [2]>   <cpl [2 × 2]>
+#> 3   0.3   0.2   1     0   unstable  <dbl [2 × 2]> <dbl [2]>   <dbl [2 × 2]>
 ```
 
 ## From `grind.R` to `{fluents}`
 
-| grind.R | fluents   |
-|---------|-----------|
-| `run()` | `solve()` |
+| grind.R    | fluents           |
+|------------|-------------------|
+| `run()`    | `solve()`         |
+| `newton()` | `steady_states()` |

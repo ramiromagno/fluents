@@ -8,6 +8,14 @@
 \description{
 An opinionated R package re-implementation of grind.R \url{https://tbb.bio.uu.nl/rdb/grindR.html} by Rob de Boer, Theoretical Biology and Bioinformatics, University of Utrecht. grind.R, in turn, is a port of the C-based program GRIND (GReat INtegrator Differential equations) \url{https://tbb.bio.uu.nl/rdb/grindC.html} to R, from the same author. This package API has more functions that do less each, while grind.R's has fewer functions that do more each.
 }
+\seealso{
+Useful links:
+\itemize{
+  \item \url{https://github.com/ramiromagno/fluents}
+  \item Report bugs at \url{https://github.com/ramiromagno/fluents/issues}
+}
+
+}
 \author{
 \strong{Maintainer}: Ramiro Magno \email{ramiro.magno@gmail.com} (\href{https://orcid.org/0000-0001-5226-3441}{ORCID})
 
